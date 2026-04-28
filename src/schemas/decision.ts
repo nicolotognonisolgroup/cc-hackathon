@@ -78,6 +78,13 @@ export const Decision = z
         path: ["action"],
       });
     }
+    if (d.action === "auto-resolve" && d.confidence < 0.85) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "auto-resolve requires confidence >= 0.85 (mandate confidence tiers)",
+        path: ["confidence"],
+      });
+    }
     if (d.confidence < 0.7 && !d.escalation_reasons.includes("low-confidence")) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -111,7 +118,12 @@ A triage decision for an IT helpdesk ticket. Required JSON fields:
 
 Constraints enforced by the validator:
 - security and finance-systems categories ALWAYS require escalation_required=true
-- auto-resolve is permitted only for category "identity" (password reset path)
+- auto-resolve is permitted only for category "identity" (password reset path) AND confidence >= 0.85
 - confidence < 0.70 must include "low-confidence" in escalation_reasons
 - action="escalate" requires escalation_required=true
+
+Confidence tiers (mandate v0.2):
+- >= 0.85  -> auto-resolve allowed (identity only)
+- 0.70 - 0.85 -> route to a category queue
+- < 0.70 -> escalate to q-triage-human
 `.trim();
