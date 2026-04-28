@@ -3,18 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CC Hackathon — IT Helpdesk Triage Agent</title>
+  <title>IT Helpdesk Triage Agent — Hackathon Scenario 5</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: #0f1117;
-      color: #e2e8f0;
-      height: 100vh;
-      overflow: hidden;
+    :root {
+      --blue:   #63b3ed;
+      --green:  #68d391;
+      --orange: #f6ad55;
+      --red:    #fc8181;
+      --purple: #b794f4;
+      --bg:     #0d1117;
+      --surface:#161b22;
+      --border: rgba(255,255,255,0.08);
+      --muted:  #8b949e;
+      --text:   #e6edf3;
     }
 
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      overflow: hidden;
+      font-size: 16px;
+    }
+
+    /* ── Slides ──────────────────────────────────────────── */
     .deck { width: 100%; height: 100vh; position: relative; }
 
     .slide {
@@ -24,410 +39,378 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 60px;
+      padding: 48px 64px;
       text-align: center;
+      animation: fadeIn .25s ease;
     }
-
     .slide.active { display: flex; }
 
-    /* Slide backgrounds */
-    .slide-1 { background: linear-gradient(135deg, #1a1f2e 0%, #0f3460 100%); }
-    .slide-2 { background: linear-gradient(135deg, #1a1f2e 0%, #16213e 100%); }
-    .slide-3 { background: linear-gradient(135deg, #0d1b2a 0%, #1a1f2e 100%); }
-    .slide-4 { background: linear-gradient(135deg, #1a1f2e 0%, #1b2838 100%); }
-    .slide-5 { background: linear-gradient(135deg, #1a1f2e 0%, #0f2027 100%); }
-    .slide-6 { background: linear-gradient(135deg, #0f1117 0%, #1a1f2e 100%); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
-    .tag {
-      font-size: 12px;
+    /* Slide tints */
+    .s1 { background: radial-gradient(ellipse at 30% 40%, #0d2a4a 0%, var(--bg) 70%); }
+    .s2 { background: radial-gradient(ellipse at 70% 30%, #1a1200 0%, var(--bg) 70%); }
+    .s3 { background: radial-gradient(ellipse at 20% 60%, #0a1f0a 0%, var(--bg) 70%); }
+    .s4 { background: radial-gradient(ellipse at 80% 50%, #1a0d2a 0%, var(--bg) 70%); }
+    .s5 { background: radial-gradient(ellipse at 40% 70%, #0d1a2a 0%, var(--bg) 70%); }
+    .s6 { background: radial-gradient(ellipse at 60% 20%, #1a0a0a 0%, var(--bg) 70%); }
+    .s7 { background: radial-gradient(ellipse at 30% 50%, #0a1a14 0%, var(--bg) 70%); }
+
+    /* ── Typography ──────────────────────────────────────── */
+    .eyebrow {
+      font-size: 11px;
       font-weight: 700;
       letter-spacing: 3px;
       text-transform: uppercase;
-      color: #63b3ed;
-      margin-bottom: 20px;
+      color: var(--blue);
+      margin-bottom: 18px;
     }
 
-    h1 { font-size: 56px; font-weight: 800; line-height: 1.1; margin-bottom: 16px; }
-    h2 { font-size: 38px; font-weight: 700; margin-bottom: 24px; }
-    h3 { font-size: 22px; font-weight: 600; color: #90cdf4; margin-bottom: 12px; }
+    h1 { font-size: 52px; font-weight: 800; line-height: 1.1; margin-bottom: 14px; }
+    h2 { font-size: 36px; font-weight: 700; margin-bottom: 20px; }
 
-    .subtitle { font-size: 22px; color: #a0aec0; margin-bottom: 40px; }
-    .accent { color: #63b3ed; }
-    .orange { color: #f6ad55; }
-    .green { color: #68d391; }
-    .red { color: #fc8181; }
+    .lead { font-size: 20px; color: var(--muted); line-height: 1.5; max-width: 680px; }
 
-    /* Cards grid */
-    .cards {
-      display: grid;
-      gap: 20px;
-      width: 100%;
-      max-width: 960px;
-      text-align: left;
+    .accent  { color: var(--blue); }
+    .g       { color: var(--green); }
+    .o       { color: var(--orange); }
+    .p       { color: var(--purple); }
+    .r       { color: var(--red); }
+
+    /* ── Pills ───────────────────────────────────────────── */
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 28px; }
+    .pill {
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid;
     }
+    .pill-b { color: var(--blue);   border-color: rgba(99,179,237,.4);  background: rgba(99,179,237,.08); }
+    .pill-g { color: var(--green);  border-color: rgba(104,211,145,.4); background: rgba(104,211,145,.08); }
+    .pill-o { color: var(--orange); border-color: rgba(246,173,85,.4);  background: rgba(246,173,85,.08); }
+    .pill-p { color: var(--purple); border-color: rgba(183,148,244,.4); background: rgba(183,148,244,.08); }
 
-    .cards-3 { grid-template-columns: repeat(3, 1fr); }
-    .cards-2 { grid-template-columns: repeat(2, 1fr); }
+    /* ── Cards ───────────────────────────────────────────── */
+    .grid { display: grid; gap: 16px; width: 100%; max-width: 1000px; text-align: left; }
+    .g3 { grid-template-columns: repeat(3, 1fr); }
+    .g2 { grid-template-columns: repeat(2, 1fr); }
+    .g4 { grid-template-columns: repeat(4, 1fr); }
 
     .card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 24px;
+      padding: 20px 22px;
     }
+    .card-title { font-size: 13px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .big-num { font-size: 36px; font-weight: 800; margin-bottom: 6px; }
 
-    .card .num {
-      font-size: 32px;
-      font-weight: 800;
-      color: #63b3ed;
-      margin-bottom: 8px;
-    }
-
-    .card p { font-size: 14px; color: #a0aec0; line-height: 1.6; }
-
-    /* Architecture diagram */
-    .arch {
-      font-family: 'Cascadia Code', 'Fira Code', monospace;
-      font-size: 14px;
-      background: rgba(0,0,0,0.4);
-      border: 1px solid rgba(99,179,237,0.3);
-      border-radius: 12px;
-      padding: 32px 40px;
+    /* ── Code / Mono blocks ──────────────────────────────── */
+    .mono {
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 13px;
+      background: #010409;
+      border: 1px solid rgba(99,179,237,.2);
+      border-radius: 10px;
+      padding: 24px 28px;
       text-align: left;
-      line-height: 2;
-      color: #e2e8f0;
-      max-width: 820px;
+      line-height: 1.9;
       width: 100%;
+      max-width: 900px;
     }
+    .mono .dim  { color: #484f58; }
+    .mono .kw   { color: var(--blue); }
+    .mono .fn   { color: var(--green); }
+    .mono .str  { color: var(--orange); }
+    .mono .cmt  { color: #484f58; font-style: italic; }
+    .mono .err  { color: var(--red); }
+    .mono .ok   { color: var(--green); }
 
-    .arch .c1 { color: #63b3ed; }
-    .arch .c2 { color: #68d391; }
-    .arch .c3 { color: #f6ad55; }
-    .arch .c4 { color: #fc8181; }
+    /* ── Scorecard table ─────────────────────────────────── */
+    .sc-table { width: 100%; max-width: 720px; border-collapse: collapse; font-size: 15px; }
+    .sc-table th { padding: 10px 18px; background: rgba(99,179,237,.1); color: var(--blue); font-weight: 600; text-align: left; border-bottom: 1px solid var(--border); }
+    .sc-table td { padding: 11px 18px; border-bottom: 1px solid var(--border); }
+    .sc-table td:last-child { font-weight: 700; }
+    .pass   { color: var(--green); }
+    .target { color: var(--muted); font-size: 12px; }
 
-    /* Scorecard table */
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      max-width: 720px;
-      font-size: 16px;
-    }
+    /* ── Stop-reason table ───────────────────────────────── */
+    .sr-table { width: 100%; max-width: 820px; border-collapse: collapse; font-size: 13px; text-align: left; }
+    .sr-table th { padding: 8px 16px; background: rgba(183,148,244,.1); color: var(--purple); font-weight: 600; border-bottom: 1px solid var(--border); }
+    .sr-table td { padding: 9px 16px; border-bottom: 1px solid rgba(255,255,255,.04); font-family: 'Cascadia Code','Fira Code',monospace; font-size: 12px; }
+    .sr-table td:first-child { color: var(--orange); }
+    .sr-table td:last-child { color: var(--muted); font-family: inherit; font-size: 13px; }
 
-    th {
-      padding: 12px 20px;
-      background: rgba(99,179,237,0.15);
-      color: #90cdf4;
-      font-weight: 600;
-      text-align: left;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
+    /* ── Safety layers ───────────────────────────────────── */
+    .layers { display: flex; flex-direction: column; gap: 12px; max-width: 820px; width: 100%; text-align: left; }
+    .layer { display: flex; align-items: flex-start; gap: 18px; padding: 16px 20px; border-radius: 0 10px 10px 0; border-left: 4px solid; }
+    .l1 { border-color: var(--blue);   background: rgba(99,179,237,.06); }
+    .l2 { border-color: var(--orange); background: rgba(246,173,85,.06); }
+    .l3 { border-color: var(--green);  background: rgba(104,211,145,.06); }
+    .layer-num { font-size: 26px; font-weight: 800; min-width: 36px; line-height: 1; }
+    .l1 .layer-num { color: var(--blue); }
+    .l2 .layer-num { color: var(--orange); }
+    .l3 .layer-num { color: var(--green); }
+    .layer-label { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .layer-sub   { font-size: 12px; color: var(--muted); line-height: 1.6; }
 
-    td {
-      padding: 12px 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      color: #e2e8f0;
-    }
-
-    td:last-child { font-weight: 700; }
-
-    .pass { color: #68d391; }
-    .target { color: #a0aec0; font-size: 13px; }
-
-    /* Layers */
-    .layers {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      max-width: 680px;
-      width: 100%;
-      text-align: left;
-    }
-
-    .layer {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      background: rgba(255,255,255,0.05);
-      border-left: 4px solid;
-      border-radius: 0 10px 10px 0;
-      padding: 16px 20px;
-    }
-
-    .layer-1 { border-color: #63b3ed; }
-    .layer-2 { border-color: #f6ad55; }
-    .layer-3 { border-color: #68d391; }
-
-    .layer-num {
-      font-size: 28px;
-      font-weight: 800;
-      min-width: 40px;
-    }
-
-    .layer-1 .layer-num { color: #63b3ed; }
-    .layer-2 .layer-num { color: #f6ad55; }
-    .layer-3 .layer-num { color: #68d391; }
-
-    .layer-label { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-    .layer-detail { font-size: 13px; color: #a0aec0; }
-
-    /* Nav */
+    /* ── Nav ─────────────────────────────────────────────── */
     nav {
       position: fixed;
-      bottom: 28px;
+      bottom: 24px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       align-items: center;
-      gap: 16px;
-      background: rgba(0,0,0,0.6);
-      border: 1px solid rgba(255,255,255,0.12);
+      gap: 14px;
+      background: rgba(22,27,34,.9);
+      border: 1px solid var(--border);
       border-radius: 40px;
-      padding: 10px 24px;
-      backdrop-filter: blur(10px);
+      padding: 8px 22px;
+      backdrop-filter: blur(12px);
     }
-
-    nav button {
-      background: none;
-      border: none;
-      color: #a0aec0;
-      font-size: 18px;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 6px;
-      transition: color 0.2s;
-    }
-
-    nav button:hover { color: #63b3ed; }
-
-    .slide-count { font-size: 13px; color: #718096; min-width: 50px; text-align: center; }
-
-    .dot {
-      width: 8px; height: 8px;
-      background: #4a5568;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .dot.active { background: #63b3ed; }
-
-    /* Pill */
-    .pill {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 700;
-      margin: 3px;
-    }
-
-    .pill-blue { background: rgba(99,179,237,0.2); color: #63b3ed; border: 1px solid rgba(99,179,237,0.4); }
-    .pill-green { background: rgba(104,211,145,0.2); color: #68d391; border: 1px solid rgba(104,211,145,0.4); }
-    .pill-orange { background: rgba(246,173,85,0.2); color: #f6ad55; border: 1px solid rgba(246,173,85,0.4); }
-
-    .pills-row { margin-top: 20px; }
-
-    /* Keyboard hint */
-    .hint { font-size: 12px; color: #4a5568; margin-top: 6px; }
+    nav button { background: none; border: none; color: var(--muted); font-size: 16px; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: color .15s; }
+    nav button:hover { color: var(--blue); }
+    .dots { display: flex; gap: 7px; align-items: center; }
+    .dot { width: 7px; height: 7px; background: #30363d; border-radius: 50%; cursor: pointer; transition: background .15s; }
+    .dot.active { background: var(--blue); }
+    .counter { font-size: 12px; color: #484f58; min-width: 40px; text-align: center; }
   </style>
 </head>
 <body>
-
 <div class="deck">
 
-  <!-- SLIDE 1: Title -->
-  <section class="slide slide-1 active">
-    <div class="tag">Hackathon · Scenario 5 · Agentic Solution</div>
+  <!-- ① TITLE ─────────────────────────────────────────── -->
+  <section class="slide s1 active">
+    <div class="eyebrow">Claude Code Hackathon · Scenario 5 · Agentic Solution</div>
     <h1>IT Helpdesk<br><span class="accent">Triage Agent</span></h1>
-    <p class="subtitle">200 requests a day, triaged by hand.<br>Not anymore.</p>
-    <div class="pills-row">
-      <span class="pill pill-blue">Claude Agent SDK</span>
-      <span class="pill pill-blue">TypeScript</span>
-      <span class="pill pill-blue">AWS Bedrock</span>
-      <span class="pill pill-green">Coordinator + 3 Specialists</span>
-      <span class="pill pill-orange">PreToolUse Hooks</span>
-      <span class="pill pill-orange">Zod Validation</span>
+    <p class="lead">200 support requests a day, triaged by hand.<br>One agent. Three specialists. Zero manual routing.</p>
+    <div class="pills">
+      <span class="pill pill-b">Claude Agent SDK</span>
+      <span class="pill pill-b">TypeScript · AWS Bedrock</span>
+      <span class="pill pill-g">Coordinator + 3 Specialists</span>
+      <span class="pill pill-g">11 Custom MCP Tools</span>
+      <span class="pill pill-o">PreToolUse Hook</span>
+      <span class="pill pill-o">Zod Validation Retry</span>
+      <span class="pill pill-p">35-Example Eval</span>
     </div>
   </section>
 
-  <!-- SLIDE 2: The Problem -->
-  <section class="slide slide-2">
-    <div class="tag">The Problem</div>
-    <h2>The Intake Queue</h2>
-    <p class="subtitle" style="margin-bottom:36px;">Every ticket goes through a human. Every. Single. One.</p>
-    <div class="cards cards-3" style="max-width:860px;">
+  <!-- ② THE PROBLEM ──────────────────────────────────── -->
+  <section class="slide s2">
+    <div class="eyebrow">The Problem</div>
+    <h2>The Intake Queue Is Drowning</h2>
+    <div class="grid g3" style="max-width:820px; margin-top:8px;">
       <div class="card">
-        <div class="num">200</div>
-        <h3>Tickets / Day</h3>
-        <p>Arriving via email, portal, chat, phone. Free-text. No structure. No priority.</p>
+        <div class="big-num accent">200</div>
+        <div class="card-title">Tickets / Day</div>
+        <p>Via email, portal, chat, phone. Free-text. No structure. No priority. All manual.</p>
       </div>
       <div class="card">
-        <div class="num" style="color:#f6ad55;">45 min</div>
-        <h3>Avg. Triage Time</h3>
-        <p>Per ticket. Most of that time is reading, classifying, and looking up context.</p>
+        <div class="big-num o">4 h</div>
+        <div class="card-title">Avg First Response</div>
+        <p>Most of that time is reading, classifying, and looking up user and KB context.</p>
       </div>
       <div class="card">
-        <div class="num" style="color:#68d391;">~60%</div>
-        <h3>Automatable</h3>
-        <p>Password resets, routing decisions, enrichment — repetitive, well-defined.</p>
+        <div class="big-num g">~65%</div>
+        <div class="card-title">Automatable</div>
+        <p>Password resets, standard routing, enrichment — repetitive and well-defined.</p>
       </div>
     </div>
+    <p class="lead" style="margin-top:28px; font-size:16px;">
+      The agent decides alone on <span class="g">identity, network, hardware, software</span>.<br>
+      It always escalates on <span class="r">security</span> and <span class="r">finance-systems</span>.
+    </p>
   </section>
 
-  <!-- SLIDE 3: Architecture -->
-  <section class="slide slide-3">
-    <div class="tag">Architecture</div>
-    <h2>Coordinator + 3 Specialists</h2>
-    <div class="arch">
-      <span class="c1">Coordinator</span><br>
-      &nbsp;&nbsp;├── <span class="c2">Task → EnrichmentAgent</span>&nbsp;&nbsp;&nbsp;lookup_user · check_account · search_kb<br>
-      &nbsp;&nbsp;├── <span class="c2">Task → ClassifierAgent</span>&nbsp;&nbsp;&nbsp;&nbsp;detect_injection · estimate_impact<br>
-      &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓ Zod Decision validation (retry × 2)<br>
-      &nbsp;&nbsp;└── <span class="c3">Task → ResolverAgent</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c4">password_reset* · route* · escalate*</span><br>
-      <br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c4">* PreToolUse hook — cannot be bypassed</span>
+  <!-- ③ AGENT LOOP ────────────────────────────────────── -->
+  <section class="slide s3">
+    <div class="eyebrow">Architecture · The Bones</div>
+    <h2>Agent Loop &amp; Subagent Split</h2>
+    <div class="mono">
+<span class="fn">triageTicket</span>(ticket) → <span class="kw">query</span>() → Claude Code subprocess
+  │
+  │ <span class="cmt">stop_reason: tool_use</span>
+  ├──► <span class="kw">Task</span> → <span class="fn">EnrichmentAgent</span>   <span class="dim">// receives: ticket_id · user_id · subject · body</span>
+  │         <span class="str">lookup_user</span> · <span class="str">check_account_status</span> · <span class="str">get_ticket_history</span> · <span class="str">search_kb</span>
+  │         <span class="cmt">stop_reason: end_turn</span> → enrichment JSON returned to coordinator
+  │
+  ├──► <span class="kw">Task</span> → <span class="fn">ClassifierAgent</span>  <span class="dim">// receives: ticket + full enrichment JSON</span>
+  │         <span class="str">detect_prompt_injection</span> · <span class="str">estimate_impact</span>
+  │         <span class="cmt">stop_reason: end_turn</span> → {category, priority, confidence, impact_eur}
+  │
+  │ <span class="cmt">Zod Decision.safeParse() → retry ×2 on failure</span>
+  │
+  └──► <span class="kw">Task</span> → <span class="fn">ResolverAgent</span>   <span class="dim">// receives: ticket + validated Decision</span>
+            <span class="str">password_reset</span>* · <span class="str">route_to_queue</span>* · <span class="str">create_escalation</span>* · <span class="str">close_ticket</span>*
+            <span class="cmt">* blocked by PreToolUse hook · stop_reason: end_turn</span>
     </div>
-    <p class="subtitle" style="margin-top:28px; font-size:15px;">11 tools across 3 specialists · outputFormat: json_schema · persistSession: false</p>
+    <p style="font-size:12px; color:var(--muted); margin-top:14px;">
+      Task subagents do <strong>not</strong> inherit coordinator context — every piece passed explicitly in the Task prompt.
+    </p>
   </section>
 
-  <!-- SLIDE 4: Safety Layers -->
-  <section class="slide slide-4">
-    <div class="tag">Safety Design</div>
-    <h2>Three Layers, No Gaps</h2>
+  <!-- ④ STOP_REASON & TOOLS ──────────────────────────── -->
+  <section class="slide s4">
+    <div class="eyebrow">Architecture · stop_reason Handling</div>
+    <h2>Loop Control &amp; Tools</h2>
+    <table class="sr-table" style="margin-bottom:22px;">
+      <thead><tr><th>stop_reason</th><th>Coordinator behaviour</th></tr></thead>
+      <tbody>
+        <tr><td>end_turn</td><td>Extract structured_output → Zod parse → return Decision</td></tr>
+        <tr><td>tool_use</td><td>SDK handles internally; coordinator sees final result only</td></tr>
+        <tr><td>error_during_execution</td><td class="o">Throw → Zod retry loop (max 2)</td></tr>
+        <tr><td>error_max_turns</td><td class="o">Throw → Zod retry loop (max 2)</td></tr>
+        <tr><td>error_max_structured_output_retries</td><td class="r">Throw immediately — unrecoverable</td></tr>
+      </tbody>
+    </table>
+    <div class="grid g4" style="max-width:900px;">
+      <div class="card"><div class="card-title" style="color:var(--blue)">Enrichment</div><p>lookup_user<br>check_account_status<br>get_ticket_history<br>search_kb · get_article</p></div>
+      <div class="card"><div class="card-title" style="color:var(--green)">Classifier</div><p>detect_prompt_injection<br>estimate_impact</p></div>
+      <div class="card"><div class="card-title" style="color:var(--orange)">Resolver ✦</div><p>password_reset<br>route_to_queue<br>create_escalation<br>close_ticket</p></div>
+      <div class="card"><div class="card-title" style="color:var(--muted)">Tool design</div><p>isError: true + code<br>4–5 per specialist<br>descriptions state what<br>the tool does <em>not</em> do</p></div>
+    </div>
+    <p style="font-size:12px; color:var(--muted); margin-top:12px;">✦ All write tools guarded by PreToolUse hook</p>
+  </section>
+
+  <!-- ⑤ SAFETY ────────────────────────────────────────── -->
+  <section class="slide s5">
+    <div class="eyebrow">The Brake · 3-Layer Safety</div>
+    <h2>No Single Point of Failure</h2>
     <div class="layers">
-      <div class="layer layer-1">
+      <div class="layer l1">
         <div class="layer-num">1</div>
         <div>
           <div class="layer-label">Coordinator System Prompt — Mandate Rules</div>
-          <div class="layer-detail">7 escalation triggers encoded in the prompt. Security/finance always escalate. VIP always escalate. Confidence &lt; 0.70 → low-confidence reason.</div>
+          <div class="layer-sub">7 escalation triggers encoded verbatim: security/finance → always escalate · VIP/executive → always escalate · confidence &lt; 0.70 → low-confidence reason · impact &gt; €5,000 → high-impact reason · injection detected → escalate · frozen account → escalate · category=other → escalate</div>
         </div>
       </div>
-      <div class="layer layer-2">
+      <div class="layer l2">
         <div class="layer-num">2</div>
         <div>
-          <div class="layer-label">Zod Decision Schema — Runtime Validation</div>
-          <div class="layer-detail">superRefine checks cross-field constraints. auto-resolve only for identity. action=escalate requires escalation_required=true. Zod error → retry prompt (max 2).</div>
+          <div class="layer-label">Zod Decision Schema — Runtime Validation + Retry</div>
+          <div class="layer-sub">superRefine checks cross-field invariants at parse time. auto-resolve only for identity. action=escalate requires escalation_required=true. confidence &lt; 0.70 must include low-confidence reason. On failure: Zod error injected into next prompt → retry × 2.</div>
         </div>
       </div>
-      <div class="layer layer-3">
+      <div class="layer l3">
         <div class="layer-num">3</div>
         <div>
           <div class="layer-label">PreToolUse Hook — Deterministic Code Gate</div>
-          <div class="layer-detail">Runs before EVERY write tool. Blocks frozen/disabled/under-investigation accounts. Blocks VIP and executive users. Blocks injection score &ge; 0.8. Cannot be overridden by rephrasing.</div>
+          <div class="layer-sub">Runs before every write tool call. Blocks: frozen / disabled / under-investigation accounts · VIP and executive users · prompt injection score ≥ 0.8. Code-level — cannot be overridden by rephrasing the ticket or manipulating the conversation context.</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SLIDE 5: Scorecard -->
-  <section class="slide slide-5">
-    <div class="tag">Evaluation</div>
-    <h2>Scorecard</h2>
-    <p class="subtitle" style="margin-bottom:28px;">35 examples · 25 labeled (stratified) · 10 adversarial (injection)</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Metric</th>
-          <th>Target</th>
-          <th>Result</th>
-        </tr>
-      </thead>
+  <!-- ⑥ SCORECARD ─────────────────────────────────────── -->
+  <section class="slide s6">
+    <div class="eyebrow">The Scorecard · Eval Harness</div>
+    <h2>Measurable. Defensible. CI-ready.</h2>
+    <p class="lead" style="margin-bottom:24px; font-size:15px;">
+      35 examples · <span class="accent">25 labeled</span> (min 3 per category, stratified) · <span class="r">10 adversarial</span> (prompt injection, social engineering, category manipulation)
+    </p>
+    <table class="sc-table">
+      <thead><tr><th>Metric</th><th>Mandate target</th><th>Status</th></tr></thead>
       <tbody>
         <tr>
           <td>Classification Accuracy</td>
-          <td class="target">&ge; 85%</td>
-          <td class="pass">Run eval to see</td>
+          <td class="target">≥ 85%</td>
+          <td class="pass">Run <code style="font-size:11px;background:rgba(255,255,255,.06);padding:1px 6px;border-radius:4px;">npm run eval</code></td>
         </tr>
         <tr>
           <td>Adversarial Pass Rate</td>
-          <td class="target">&ge; 95%</td>
-          <td class="pass">Run eval to see</td>
+          <td class="target">≥ 95%</td>
+          <td class="pass">Run <code style="font-size:11px;background:rgba(255,255,255,.06);padding:1px 6px;border-radius:4px;">npm run eval</code></td>
         </tr>
         <tr>
           <td>False-Confidence Rate</td>
-          <td class="target">&le; 5%</td>
-          <td class="pass">Run eval to see</td>
+          <td class="target">≤ 5%</td>
+          <td class="pass">Run <code style="font-size:11px;background:rgba(255,255,255,.06);padding:1px 6px;border-radius:4px;">npm run eval</code></td>
         </tr>
         <tr>
           <td>Useful-Escalation Rate</td>
-          <td class="target">&ge; 90%</td>
-          <td class="pass">Run eval to see</td>
+          <td class="target">≥ 90%</td>
+          <td class="pass">Run <code style="font-size:11px;background:rgba(255,255,255,.06);padding:1px 6px;border-radius:4px;">npm run eval</code></td>
         </tr>
       </tbody>
     </table>
-    <p style="margin-top:20px; font-size:13px; color:#718096;">Run <code style="background:rgba(255,255,255,0.08);padding:2px 8px;border-radius:4px;">npm run eval</code> to populate results in evals/scorecard-latest.json</p>
+    <p style="margin-top:16px; font-size:12px; color:var(--muted);">Output: <code style="font-size:11px;background:rgba(255,255,255,.06);padding:1px 6px;border-radius:4px;">evals/scorecard-latest.json</code> — Legal has a defensible artifact before any launch approval.</p>
   </section>
 
-  <!-- SLIDE 6: Closing -->
-  <section class="slide slide-6">
-    <div class="tag">Summary</div>
+  <!-- ⑦ SUMMARY ───────────────────────────────────────── -->
+  <section class="slide s7">
+    <div class="eyebrow">Summary</div>
     <h2>What We Built</h2>
-    <div class="cards cards-2" style="max-width:760px; margin-bottom:36px;">
+    <div class="grid g2" style="max-width:820px; margin-bottom:24px;">
       <div class="card">
-        <h3>Agentic Core</h3>
-        <p>Coordinator + 3 specialists via Claude Agent SDK. Task subagents with explicit context passing. No inherited state — everything is explicit.</p>
+        <div class="card-title">The Mandate</div>
+        <p>One-page autonomy boundary. 7 ticket categories, 4 priorities, 7 hard escalation triggers. "What we deliberately do not automate" section included.</p>
       </div>
       <div class="card">
-        <h3>Safety Architecture</h3>
-        <p>3-layer defense: prompt rules + Zod runtime + PreToolUse hook. The hook is immune to prompt injection — it runs at the code level.</p>
+        <div class="card-title">The Bones</div>
+        <p>ADR-002 with full agent loop diagram and stop_reason table. Context isolation documented: every Task prompt lists what it receives explicitly.</p>
       </div>
       <div class="card">
-        <h3>11 Custom Tools</h3>
-        <p>Per-specialist tools via in-process MCP server. Descriptions state what each tool does NOT do. Errors are structured, never raw strings.</p>
+        <div class="card-title">The Tools</div>
+        <p>11 custom MCP tools via in-process server. 4–5 per specialist. Descriptions teach boundaries and what each tool does NOT do. Structured errors with reason codes.</p>
       </div>
       <div class="card">
-        <h3>Eval-Driven</h3>
-        <p>35-example eval harness with stratified and adversarial sets. Scorecard against 4 mandate thresholds. JSON output for CI integration.</p>
+        <div class="card-title">The Brake + Attack + Scorecard</div>
+        <p>3-layer safety. 10 adversarial examples including prompt injection, role override, and category manipulation. Eval harness with 4 mandate metrics.</p>
       </div>
     </div>
-    <div class="pills-row">
-      <span class="pill pill-blue">query() + AgentDefinition</span>
-      <span class="pill pill-blue">createSdkMcpServer()</span>
-      <span class="pill pill-orange">hooks.PreToolUse</span>
-      <span class="pill pill-orange">outputFormat: json_schema</span>
-      <span class="pill pill-green">Zod retry loop</span>
-      <span class="pill pill-green">ADR-001 / 002 / 003</span>
+    <div class="pills">
+      <span class="pill pill-b">query() · AgentDefinition · Task</span>
+      <span class="pill pill-b">createSdkMcpServer() · tool()</span>
+      <span class="pill pill-o">hooks.PreToolUse</span>
+      <span class="pill pill-o">outputFormat: json_schema</span>
+      <span class="pill pill-g">Zod retry loop · stop_reason handling</span>
+      <span class="pill pill-p">ADR-001 · 002 · 003 · docs/mandate.md</span>
     </div>
   </section>
 
-</div>
+</div><!-- .deck -->
 
 <!-- Navigation -->
 <nav>
-  <button id="prev" title="Previous">&larr;</button>
-  <div id="dots"></div>
-  <button id="next" title="Next">&rarr;</button>
-  <span class="slide-count" id="counter">1 / 6</span>
+  <button id="prev">&#8592;</button>
+  <div class="dots" id="dots"></div>
+  <button id="next">&#8594;</button>
+  <span class="counter" id="counter">1 / 7</span>
 </nav>
 
 <script>
-  const slides = document.querySelectorAll('.slide');
-  const dotsContainer = document.getElementById('dots');
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const dotsEl = document.getElementById('dots');
   const counter = document.getElementById('counter');
-  let current = 0;
+  let cur = 0;
 
   slides.forEach((_, i) => {
-    const dot = document.createElement('div');
-    dot.className = 'dot' + (i === 0 ? ' active' : '');
-    dot.addEventListener('click', () => go(i));
-    dotsContainer.appendChild(dot);
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => go(i));
+    dotsEl.appendChild(d);
   });
 
   function go(n) {
-    slides[current].classList.remove('active');
-    document.querySelectorAll('.dot')[current].classList.remove('active');
-    current = (n + slides.length) % slides.length;
-    slides[current].classList.add('active');
-    document.querySelectorAll('.dot')[current].classList.add('active');
-    counter.textContent = (current + 1) + ' / ' + slides.length;
+    slides[cur].classList.remove('active');
+    dotsEl.children[cur].classList.remove('active');
+    cur = ((n % slides.length) + slides.length) % slides.length;
+    slides[cur].classList.add('active');
+    dotsEl.children[cur].classList.add('active');
+    counter.textContent = (cur + 1) + ' / ' + slides.length;
   }
 
-  document.getElementById('prev').addEventListener('click', () => go(current - 1));
-  document.getElementById('next').addEventListener('click', () => go(current + 1));
+  document.getElementById('prev').addEventListener('click', () => go(cur - 1));
+  document.getElementById('next').addEventListener('click', () => go(cur + 1));
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') go(current + 1);
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') go(current - 1);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') go(cur + 1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')                    go(cur - 1);
+    const n = parseInt(e.key);
+    if (n >= 1 && n <= slides.length) go(n - 1);
   });
 </script>
 </body>

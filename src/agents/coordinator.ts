@@ -135,14 +135,21 @@ async function runQuery(ticket: Ticket, zodError?: string): Promise<unknown> {
 
   for await (const msg of queryResult) {
     if (msg.type === "result") {
-      // Use record access to avoid complex union narrowing with exactOptionalPropertyTypes
+      // Record access avoids complex union narrowing under exactOptionalPropertyTypes.
       const r = msg as Record<string, unknown>;
-      if (r["subtype"] === "success") {
+      const subtype = r["subtype"] as string;
+
+      if (subtype === "success") {
         structured = r["structured_output"];
         resultText = (r["result"] as string) ?? "";
+      } else if (subtype === "error_max_structured_output_retries") {
+        // Schema mismatch that the SDK already retried — unrecoverable at this level.
+        throw new Error(`Coordinator failed: structured output schema rejected after SDK retries [${subtype}]`);
       } else {
+        // error_during_execution | error_max_turns | error_max_budget_usd
+        // All are recoverable via the Zod retry loop one level up.
         const errors = (r["errors"] as string[] | undefined) ?? [];
-        throw new Error(`Coordinator query failed [${r["subtype"]}]: ${errors.join("; ")}`);
+        throw new Error(`Coordinator query failed [stop_reason: ${subtype}]: ${errors.join("; ")}`);
       }
     }
   }
