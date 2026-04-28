@@ -1,29 +1,29 @@
-# ADR-001: Stack e SDK
+# ADR-001: Stack and SDK
 
-- **Stato**: Accettato
-- **Data**: 2026-04-28
+- **Status**: Accepted
+- **Date**: 2026-04-28
 
-## Contesto
+## Context
 
-Lo Scenario 5 richiede l'uso del **Claude Agent SDK**, disponibile in Python e TypeScript. Va scelto un linguaggio per il progetto e un backend modello. Gli organizer hanno predisposto accesso ai modelli Claude tramite **AWS Bedrock** (profilo `bootcamp`, regione `us-east-1`).
+Scenario 5 mandates the use of the **Claude Agent SDK**, available in Python and TypeScript. We need to pick a language and a model backend. The hackathon organizers provisioned access to Claude models through **AWS Bedrock** (profile `bootcamp`, region `us-east-1`).
 
-## Decisione
+## Decision
 
-- **Linguaggio**: TypeScript con `@anthropic-ai/claude-agent-sdk`.
+- **Language**: TypeScript with `@anthropic-ai/claude-agent-sdk`.
 - **Runtime**: Node 20+, ESM.
-- **Backend modello**: AWS Bedrock (`CLAUDE_CODE_USE_BEDROCK=1`), modello principale Claude Sonnet 4 via inference profile.
-- **Schema validation**: Zod come fonte di verità per tool input e output strutturati.
-- **Test**: Vitest per unit, harness custom per eval (Scenario challenge 7).
+- **Model backend**: AWS Bedrock (`CLAUDE_CODE_USE_BEDROCK=1`), primary model Claude Sonnet 4 via inference profile.
+- **Schema validation**: Zod as the single source of truth for tool inputs and structured outputs.
+- **Test**: Vitest for unit tests; a custom harness for evals (Scenario challenge 7).
 
-## Conseguenze
+## Consequences
 
-- **+** Tipizzazione forte sui tool input/output via Zod, riduce errori di runtime e parsing.
-- **+** Documentazione del SDK TypeScript più ricca di esempi.
-- **+** Bedrock tiene credenziali e billing fuori dal codice; nessuna `ANTHROPIC_API_KEY` da gestire.
-- **−** Ecosistema di librerie eval LLM-specific più maturo in Python; dovremo costruirci un harness di valutazione minimale a mano.
-- **−** API `interrupt()` e session management più espliciti in Python; in TS la stessa funzionalità c'è ma è meno documentata.
+- **+** Strong typing on tool inputs/outputs through Zod, reducing runtime and parsing errors.
+- **+** TypeScript SDK documentation has more examples.
+- **+** Bedrock keeps credentials and billing out of the codebase; no `ANTHROPIC_API_KEY` to manage per developer.
+- **−** Python's LLM-eval ecosystem is more mature; we will build a small eval harness by hand.
+- **−** `interrupt()` and session management APIs are more explicitly documented in Python; the same functionality exists in TS but is less surfaced.
 
-## Alternative scartate
+## Alternatives considered
 
-- **Python**: scartato per sfruttare la type-safety di Zod nei tool schema, dato che il design dei tool è centrale nello scoring (challenge 3).
-- **API key Anthropic diretta**: scartata perché aggiunge dipendenza da un secret personale; Bedrock è già configurato per tutti i partecipanti.
+- **Python**: rejected to leverage Zod's type-safety on tool schemas, given that tool design is central to scoring (challenge 3).
+- **Direct Anthropic API key**: rejected because it adds a personal-secret dependency; Bedrock is already provisioned for all participants.

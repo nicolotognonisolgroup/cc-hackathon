@@ -1,63 +1,65 @@
 # CLAUDE.md
 
-Convenzioni di progetto per Claude Code. Aggiornare man mano che il team prende decisioni.
+Project conventions for Claude Code. Update as the team makes decisions.
 
-## Progetto
+## Project
 
 - **Hackathon**: Anthropic Claude Code Hackathon — Scenario 5 (Agentic Solution / "The Intake")
-- **Dominio**: TBD (candidati: IT helpdesk, sales lead routing)
+- **Domain**: IT helpdesk triage (see `docs/mandate.md`)
 - **Stack**: TypeScript + Node 20+, `@anthropic-ai/claude-agent-sdk`
-- **Backend modello**: AWS Bedrock (login via `aws login --profile bootcamp --region us-east-1`); fallback API key Anthropic se necessario.
+- **Model backend**: AWS Bedrock (login via `aws login --profile bootcamp --region us-east-1`); fallback to Anthropic API key if needed.
 
-## Struttura repo
+## Repo layout
 
 ```
-src/             codice agente (coordinator, specialisti, tool)
+src/             agent code (coordinator, specialists, tools)
 src/tools/       custom tool definitions (zod schemas)
-src/agents/      AgentDefinition di coordinator e subagent
+src/agents/      AgentDefinitions for coordinator and subagents
 src/hooks/       PreToolUse / PostToolUse / permission callbacks
-tests/           unit test (vitest)
-evals/           dataset etichettato + harness eval (Scorecard)
-decisions/       ADR markdown numerati
-docs/            mandate.md e altra documentazione di prodotto
+src/schemas/     shared Zod schemas (Decision, etc.)
+tests/           unit tests (vitest)
+evals/           labeled dataset + eval harness (Scorecard)
+decisions/       numbered markdown ADRs
+docs/            mandate.md and other product documentation
 ```
 
-## Convenzioni di codice
+## Code conventions
 
-- TypeScript strict, `noUncheckedIndexedAccess` attivo. Niente `any` se non con commento `// eslint-disable` motivato.
-- ESM (`"type": "module"`). Import relativi con estensione `.js`.
-- Niente commenti che spiegano il *cosa*; commenti solo per *perché* non ovvi (vincoli, workaround).
-- Zod come unica fonte di verità per schemi di tool e di output strutturato. I tipi TS si derivano da Zod (`z.infer`).
-- Tool error responses sempre `{ content, isError: true }` con un `code` machine-readable nel content, mai stringhe libere.
+- TypeScript strict, `noUncheckedIndexedAccess` on. No `any` unless commented with a clear reason.
+- ESM (`"type": "module"`). Relative imports include the `.js` extension.
+- No comments that explain *what*; comments only for non-obvious *why* (constraints, workarounds).
+- Zod is the single source of truth for tool schemas and structured outputs. TS types are derived from Zod (`z.infer`).
+- Tool error responses always `{ content, isError: true }` with a machine-readable `code` field, never a raw string.
 
-## Convenzioni agentiche
+## Agent conventions
 
-- **Coordinator + specialist**: il coordinator non chiama tool di scrittura; instrada a uno specialista.
-- **Context passing esplicito**: ogni `Task` riceve solo i campi necessari, niente passaggio implicito.
-- **Validation-retry loop**: ogni output strutturato passa per un validatore Zod; al fallimento, il messaggio di errore Zod viene reinserito nel prompt e si ritenta fino a `MAX_RETRIES` (default 2). Logga `retry_count` e `error_type`.
-- **Reasoning chain**: ogni decisione logga input → tool calls → output strutturato in JSON line, replayable dal solo log.
+- **Coordinator + specialists**: the coordinator does not call write tools; it routes to a specialist.
+- **Explicit context passing**: each `Task` receives only the fields it needs, no implicit propagation.
+- **Validation-retry loop**: every structured output goes through a Zod validator; on failure the Zod error is fed back into the prompt and the call is retried up to `MAX_RETRIES` (default 2). Logs `retry_count` and `error_type`.
+- **Reasoning chain**: every decision logs input → tool calls → structured output as JSON-line, replayable from the log alone.
 
 ## Permissions / hooks
 
-- `PreToolUse` per **stop deterministici** (PII pattern, conti VIP, route bloccate). Hook ≠ prompt: l'ADR-003 spiegherà perché.
-- `canUseTool` per **escalation probabilistica**: regola = `categoria + confidence < soglia + impact_bucket`.
-- Modalità default in dev: `default` (chiede). Negli eval CI: `bypassPermissions` con tool di scrittura mockati.
+- `PreToolUse` for **deterministic stops** (PII patterns, VIP accounts, blocked routes). Hook ≠ prompt: ADR-003 will explain why.
+- `canUseTool` for **probabilistic escalation**: rule = `category + confidence < threshold + impact_bucket`.
+- Default mode in dev: `default` (asks). In CI evals: `bypassPermissions` with write tools mocked.
 
-## Segreti
+## Secrets
 
-- `.env` mai committato (è in `.gitignore`).
-- Niente credenziali in log o output del modello. Hook `PostToolUse` per redazione se serve.
+- `.env` is never committed (in `.gitignore`).
+- No credentials in logs or model output. `PostToolUse` hook for redaction if needed.
 
-## Lingua
+## Language
 
-- Codice e commenti tecnici in inglese. Documentazione di prodotto (`docs/`, ADR, README) in italiano.
+- **All repository content in English**: code, comments, docstrings, commit messages, ADRs, `docs/`, `README.md`, `CLAUDE.md`. No Italian in committed files.
+- Team conversation may happen in Italian, but anything written to the repo is English.
 
-## Comandi utili
+## Useful commands
 
 ```bash
 npm install
-cp .env.example .env   # poi compilare
-npm run smoke          # test connettività backend
+cp .env.example .env   # then fill in values
+npm run smoke          # backend connectivity test
 npm run typecheck
 npm test
 ```
