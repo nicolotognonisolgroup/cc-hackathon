@@ -1,0 +1,26 @@
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+dist/
+build/
+*.log
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+
+# AWS
+.aws-sam/
